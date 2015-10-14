@@ -1,0 +1,65 @@
+{
+  "allowed_domains": ["mooc-list.com"],
+
+  "start_urls": ["https://www.mooc-list.com/"],
+
+  "follow_save_urls": ["/course"],
+
+  "s3bucket": "cs548-crawl-data",
+  "s3folder": "mooc-list",
+
+  "content_filter_params": {
+    "any_filters": [
+      {
+        "tag": "div",
+        "attribute": "class",
+        "value": "field-name-field-categories",
+        "content": "Computer Science: Artificial Intelligence, Robotics, Vision"
+      },
+      {
+        "tag": "div",
+        "attribute": "class",
+        "value": "field-name-field-categories",
+        "content": "Computer Science: Programming & Software Engineering"
+      },
+      {
+        "tag": "div",
+        "attribute": "class",
+        "value": "field-name-field-categories",
+        "content": "Computer Science: Systems, Security, Networking"
+      },
+      {
+        "tag": "div",
+        "attribute": "class",
+        "value": "field-name-field-categories",
+        "content": "Computer Science: Theory"
+      },
+      {
+        "tag": "div",
+        "attribute": "class",
+        "value": "field-name-field-categories",
+        "content": "Information, Technology, and Design"
+      },
+      {
+        "tag": "div",
+        "attribute": "class",
+        "value": "field-name-field-categories",
+        "content": "Statistics & Data Analysis"
+      },
+      {
+        "tag": "div",
+        "attribute": "class",
+        "value": "field-name-field-categories",
+        "content": "Mathematics"
+      }
+    ],
+    "all_filters": [
+      {
+        "tag": "div",
+        "attribute": "class",
+        "value": "field-name-field-language",
+        "content": "English"
+      }
+    ]
+  }
+}

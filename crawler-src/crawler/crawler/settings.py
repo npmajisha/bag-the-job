@@ -14,11 +14,9 @@ BOT_NAME = 'gen-crawler'
 SPIDER_MODULES = ['crawler.spiders']
 NEWSPIDER_MODULE = 'crawler.spiders'
 
-OUTPUT_PATH = '/Users/akhil/Academics/CS548/Project/files/'
-
 #Logging
-LOG_FILE = '/Users/akhil/Academics/CS548/Project/files/scrapy.log'
-LOG_LEVEL = 'INFO'
+LOG_FILE = 'logs/scrapy.log'
+LOG_LEVEL = 'WARN'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'crawler (+http://www.yourdomain.com)'
@@ -66,9 +64,9 @@ LOG_LEVEL = 'INFO'
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'crawler.pipelines.SomePipeline': 300,
-#}
+# ITEM_PIPELINES = {
+#    'crawler.pipelines.DownloadPipeline': 300,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
