@@ -1,0 +1,5 @@
+{
+  "allowed_domains": ["mooc-list.com"],
+  "start_urls": ["https://www.mooc-list.com/"],
+  "follow_save_urls": ["/course"]
+}
