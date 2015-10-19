@@ -1,0 +1,81 @@
+{
+  "sourceS3Bucket": "cs548-crawl-data",
+  "sourceS3Folder": "mooc-list",
+  "targetS3Bucket": "cs548-wrapped-data",
+  "targetS3Folder": "mooc-list",
+
+  "content_filter_params": [
+    {
+      "tag": "h1",
+      "attribute": "id",
+      "value": "page-title",
+      "regex": "^(.*) \\((.*)\\)$",
+      "group": "1",
+      "target": "courseTitle"
+    },
+    {
+      "tag": "div",
+      "attribute": "class",
+      "value": "field-name-field-start-date-text",
+      "target": "startDate"
+    },
+    {
+      "tag": "div",
+      "attribute": "class",
+      "value": "field-name-field-university-entity",
+      "target": "university"
+    },
+    {
+      "tag": "div",
+      "attribute": "class",
+      "value": "field-name-field-length",
+      "target": "duration"
+    },
+    {
+      "tag": "div",
+      "attribute": "class",
+      "value": "field-name-field-estimated-effort",
+      "target": "estimatedEffort"
+    },
+    {
+      "tag": "div",
+      "attribute": "class",
+      "value": "field-name-field-recommended-background",
+      "target": "recommendedBackground"
+    },
+    {
+      "tag": "div",
+      "attribute": "class",
+      "value": "fivestar-summary-average-count",
+      "target": "courseRating",
+      "regex": "[^0-9]*(\\d*)",
+      "group": "1"
+    },
+    {
+      "tag": "div",
+      "attribute": "class",
+      "value": "field-name-field-initiative",
+      "target": "courseProvider"
+    },
+    {
+      "tag": "div",
+      "attribute": "id",
+      "value": "introCurso",
+      "target": "courseIntro"
+    },
+    {
+      "tag": "div",
+      "attribute": "id",
+      "value": "corpoCurso",
+      "target": "courseDesc"
+    },
+    {
+      "type": "href",
+      "tag": "div",
+      "attribute": "class",
+      "value": "gotoCurso",
+      "index": "0",
+      "target": "courseLink"
+    }
+  ]
+}
