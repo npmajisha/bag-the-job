@@ -23,6 +23,7 @@ def setup_logging(logfile, loglevel=logging.INFO):
 
 def apply_filter(html_string, filter):
     if 'type' in filter and filter['type'] == 'href':
+<<<<<<< HEAD
         content = htmlparser.get_href_from_tags(html_string, {'name': filter['tag'],
                                                               'attrs': {filter['attribute']: filter['value']}})[0]
     elif 'type' in filter and filter['type'] == 'text':
@@ -33,6 +34,11 @@ def apply_filter(html_string, filter):
         content = htmlparser.get_attr_from_tags(html_string, {'name': filter['tag'],
                                                               'attrs': {filter['attribute']: filter['value']},
                                                               'type': filter['type']})[0]
+=======
+        content = htmlParser.getHrefFromTags((filter['tag'], filter['attribute'], filter['value']))[0]
+    elif 'type' in filter and filter['type'] == 'text':
+        content = htmlParser.getFormattedTextFromTags((filter['tag'], filter['attribute'], filter['value']))[0]
+>>>>>>> Wrapper enhanced with more features
     else:
         content = htmlparser.get_content_from_tags(html_string, {'name': filter['tag'],
                                                                  'attrs': {filter['attribute']: filter['value']}})[0]
