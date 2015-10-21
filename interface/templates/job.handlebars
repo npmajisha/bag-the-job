@@ -1,0 +1,25 @@
+{{#each job}}
+    <div class="media">
+        <div class="media-left media-top">
+            <img class="media-object" width="100" src={{getEmployerImage jobEmpImage}}>
+        </div>
+        <div class="media-body">
+            <h5 class="media-heading">{{jobTitle}}</h5>
+
+            <div class="row">
+                <div class="col-md-12">
+                    {{jobEmployer}} - {{jobCity}}, {{jobState}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="star-ratings-css" , title="{{getStarRating jobRating}}"></div>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary" onClick='window.open("{{jobUrl}}")'>Apply now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <legend></legend>
+{{/each}}

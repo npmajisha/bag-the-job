@@ -1,0 +1,92 @@
+body {
+    padding: 50px;
+    /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+}
+
+a {
+    color: #00B7FF;
+}
+
+#summary {
+    text-align: center;
+    font-family: "Menlo";
+}
+
+#pages {
+    display: table;
+    margin: 0 auto;
+}
+
+.star-ratings-css {
+    unicode-bidi: bidi-override;
+    color: #c5c5c5;
+    font-size: 25px;
+    height: 25px;
+    width: 125px;
+    margin: 0;
+    position: relative;
+    text-shadow: 0 1px 0 #a2a2a2;
+}
+
+.star-ratings-css::before {
+    content: '★★★★★';
+    opacity: .3;
+}
+
+[title=".000"]::after {
+    width: 0%;
+}
+
+[title=".125"]::after {
+    width: 10%;
+}
+
+[title=".250"]::after {
+    width: 20%;
+}
+
+[title=".375"]::after {
+    width: 30%;
+}
+
+[title=".500"]::after {
+    width: 40%;
+}
+
+[title=".625"]::after {
+    width: 50%;
+}
+
+[title=".750"]::after {
+    width: 60%;
+}
+
+[title=".875"]::after {
+    width: 70%;
+}
+
+[title="1.000"]::after {
+    width: 80%;
+}
+
+[title="1.125"]::after {
+    width: 90%;
+}
+
+[title="1.250"]::after {
+    width: 100%;
+}
+
+.star-ratings-css::after {
+    color: gold;
+    content: '★★★★★';
+    text-shadow: 0 1px 0 #ab5414;
+    position: absolute;
+    z-index: 1;
+    display: block;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);

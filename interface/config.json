@@ -1,0 +1,12 @@
+{
+  "default": {
+    "ec2InstanceIP": "52.10.88.23",
+    "ec2InstancePORT": "8983",
+    "solrCore": "samplejobs"
+  },
+  "development": {
+    "ec2InstanceIP": "54.86.116.103",
+    "ec2InstancePORT": "8983",
+    "solrCore": "test_jobs"
+  }
+}
