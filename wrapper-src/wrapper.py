@@ -24,6 +24,8 @@ def setup_logging(logfile, loglevel=logging.INFO):
 def apply_filter(htmlParser, filter):
     if 'type' in filter and filter['type'] == 'href':
         content = htmlParser.getHrefFromTags((filter['tag'], filter['attribute'], filter['value']))[0]
+    elif 'type' in filter and filter['type'] == 'text':
+        content = htmlParser.getFormattedTextFromTags((filter['tag'], filter['attribute'], filter['value']))[0]
     else:
         content = htmlParser.getContentFromTags([(filter['tag'], filter['attribute'], filter['value'])])[0]
     return content

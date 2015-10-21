@@ -1,0 +1,6 @@
+{
+  "sourceS3Bucket": "bag-the-job",
+  "sourceS3Folder": "jobs",
+  "targetS3Bucket": "bag-the-job-wrapped",
+  "targetS3Folder": "jobs"
+}

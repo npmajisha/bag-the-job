@@ -1,6 +1,7 @@
 __author__ = 'akhil'
 
 from bs4 import BeautifulSoup
+import html2text
 
 class HTMLParser:
 
@@ -31,4 +32,11 @@ class HTMLParser:
                 links.append(a.attrs['href'])
         return links
 
+    def getFormattedTextFromTags(self, tag):
+        soup = BeautifulSoup(self.content, 'html.parser')
+        tagContent = []
+        for div in soup.findAll(tag[0], {tag[1]: tag[2]}):
+            div = str(div)
+            tagContent.append(html2text.HTML2Text().handle(str(div)))
+        return tagContent
     content = property(getContent, setContent)
