@@ -27,10 +27,15 @@ def apply_filter(html_string, filter):
                                                               'attrs': {filter['attribute']: filter['value']}})[0]
     elif 'type' in filter and filter['type'] == 'text':
         content = htmlparser.get_formatted_text_from_tags(html_string, {'name': filter['tag'],
-                                                              'attrs': {filter['attribute']: filter['value']}})[0]
+                                                                        'attrs': {
+                                                                            filter['attribute']: filter['value']}})[0]
+    elif 'type' in filter:
+        content = htmlparser.get_attr_from_tags(html_string, {'name': filter['tag'],
+                                                              'attrs': {filter['attribute']: filter['value']},
+                                                              'type': filter['type']})[0]
     else:
         content = htmlparser.get_content_from_tags(html_string, {'name': filter['tag'],
-                                                              'attrs': {filter['attribute']: filter['value']}})[0]
+                                                                 'attrs': {filter['attribute']: filter['value']}})[0]
     return content
 
 
