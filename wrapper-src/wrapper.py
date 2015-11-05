@@ -23,7 +23,6 @@ def setup_logging(logfile, loglevel=logging.INFO):
 
 def apply_filter(html_string, filter):
     if 'type' in filter and filter['type'] == 'href':
-<<<<<<< HEAD
         content = htmlparser.get_href_from_tags(html_string, {'name': filter['tag'],
                                                               'attrs': {filter['attribute']: filter['value']}})[0]
     elif 'type' in filter and filter['type'] == 'text':
@@ -34,11 +33,6 @@ def apply_filter(html_string, filter):
         content = htmlparser.get_attr_from_tags(html_string, {'name': filter['tag'],
                                                               'attrs': {filter['attribute']: filter['value']},
                                                               'type': filter['type']})[0]
-=======
-        content = htmlParser.getHrefFromTags((filter['tag'], filter['attribute'], filter['value']))[0]
-    elif 'type' in filter and filter['type'] == 'text':
-        content = htmlParser.getFormattedTextFromTags((filter['tag'], filter['attribute'], filter['value']))[0]
->>>>>>> Wrapper enhanced with more features
     else:
         content = htmlparser.get_content_from_tags(html_string, {'name': filter['tag'],
                                                                  'attrs': {filter['attribute']: filter['value']}})[0]
@@ -88,6 +82,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', '-c', help='configuration file')
     parser.add_argument('--logfile', '-lf', help='log file target')
+    parser.add_argument('--file', '-f', help='a single html file to be wrapped')
     args = parser.parse_args()
 
     # initialize logging
@@ -96,17 +91,22 @@ if __name__ == "__main__":
     with open(args.config) as file:
         config = json.loads(file.read())
 
-    s3 = boto3.resource('s3')
-    client = boto3.client('s3')
+    if args.file is not None:
+        response = extract_fields(open(args.file).read(), config, logger, args.file)
+        print(response)
 
-    bucket = s3.Bucket(config.get('sourceS3Bucket'))
+    else:
+        s3 = boto3.resource('s3')
+        client = boto3.client('s3')
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        futures = dict((executor.submit(process_key, client, config, key.key, logger), key.key)
-                       for key in bucket.objects.all())
+        bucket = s3.Bucket(config.get('sourceS3Bucket'))
 
-        for future in concurrent.futures.as_completed(futures):
-            key = futures[future]
-            if future.exception() is not None:
-                logger.error('%r generated an exception: %s' % (key,
-                                                                future.exception()))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            futures = dict((executor.submit(process_key, client, config, key.key, logger), key.key)
+                           for key in bucket.objects.all())
+
+            for future in concurrent.futures.as_completed(futures):
+                key = futures[future]
+                if future.exception() is not None:
+                    logger.error('%r generated an exception: %s' % (key,
+                                                                    future.exception()))
