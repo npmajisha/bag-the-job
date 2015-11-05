@@ -1,0 +1,53 @@
+{
+  "sourceS3Bucket": "bag-the-job",
+  "sourceS3Folder": "jobs",
+  "targetS3Bucket": "bag-the-job-wrapped1",
+  "targetS3Folder": "jobs",
+
+  "content_filter_params": [
+     {
+      "tag": "div",
+      "type": "text",
+      "attribute": "class",
+      "value": "jobDescriptionContent desc",
+      "target": "jobDesc"
+    },
+    {
+      "tag":"link",
+      "attribute": "rel",
+      "value": "canonical",
+      "type": "href",
+      "target": "jobUrl"
+    },
+    {
+      "tag":"button",
+      "attribute":"class",
+      "value":"save-job-button",
+      "type":"data-jobTitle",
+      "target": "jobTitle"
+    },
+    {
+      "tag":"button",
+      "attribute":"class",
+      "value":"save-job-button",
+      "type":"data-empName",
+      "target": "jobEmployer"
+    },
+    {
+      "tag":"span",
+      "attribute":"class",
+      "value":"subtle ib",
+      "regex": " – ([A-Za-z ]*), ([A-Z]*)",
+      "group": "1",
+      "target": "jobCity"
+    },
+    {
+      "tag":"span",
+      "attribute":"class",
+      "value":"subtle ib",
+      "regex": " – ([A-Za-z ]*), ([A-Z]*)",
+      "group": "2",
+      "target": "jobState"
+    }
+  ]
+}
