@@ -23,14 +23,14 @@
       "tag":"button",
       "attribute":"class",
       "value":"save-job-button",
-      "type":"data-jobTitle",
+      "type":"data-jobtitle",
       "target": "jobTitle"
     },
     {
       "tag":"button",
       "attribute":"class",
       "value":"save-job-button",
-      "type":"data-empName",
+      "type":"data-empname",
       "target": "jobEmployer"
     },
     {
@@ -48,6 +48,13 @@
       "regex": " – ([A-Za-z ]*), ([A-Z]*)",
       "group": "2",
       "target": "jobState"
+    },
+    {
+      "tag":"span",
+      "attribute":"class",
+      "value":"value-title",
+      "type":"title",
+      "target":"jobRating"
     }
   ]
 }
