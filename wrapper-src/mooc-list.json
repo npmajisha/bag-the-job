@@ -79,6 +79,13 @@
       "value": "gotoCurso",
       "index": "0",
       "target": "courseLink"
+    },
+    {
+      "tag": "div",
+      "type": "list",
+      "attribute": "class",
+      "value": "field-name-field-tags",
+      "target": "tags"
     }
   ]
 }

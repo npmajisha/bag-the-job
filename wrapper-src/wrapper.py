@@ -22,13 +22,18 @@ def setup_logging(logfile, loglevel=logging.INFO):
 
 
 def apply_filter(html_string, filter):
+
     if 'type' in filter and filter['type'] == 'a_href':
         content = htmlparser.get_href_from_tags(html_string, {'name': filter['tag'],
                                                               'attrs': {filter['attribute']: filter['value']}})[0]
     elif 'type' in filter and filter['type'] == 'text':
         content = htmlparser.get_formatted_text_from_tags(html_string, {'name': filter['tag'],
                                                                         'attrs': {
-                                                                            filter['attribute']: filter['value']}})[0]
+                                                                             filter['attribute']: filter['value']}})[0]
+    elif 'type' in filter and filter['type'] == 'list':
+        content = htmlparser.get_content_list_from_tags(html_string, {'name': filter['tag'],
+                                                                        'attrs': {
+                                                                             filter['attribute']: filter['value']}})[0]
     elif 'type' in filter:
         content = htmlparser.get_attr_from_tags(html_string, {'name': filter['tag'],
                                                               'attrs': {filter['attribute']: filter['value']},
