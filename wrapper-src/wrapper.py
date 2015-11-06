@@ -22,7 +22,7 @@ def setup_logging(logfile, loglevel=logging.INFO):
 
 
 def apply_filter(html_string, filter):
-    if 'type' in filter and filter['type'] == 'href':
+    if 'type' in filter and filter['type'] == 'a_href':
         content = htmlparser.get_href_from_tags(html_string, {'name': filter['tag'],
                                                               'attrs': {filter['attribute']: filter['value']}})[0]
     elif 'type' in filter and filter['type'] == 'text':
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     if args.file is not None:
         response = extract_fields(open(args.file).read(), config, logger, args.file)
-        print(response)
+        print(json.dumps(response))
 
     else:
         s3 = boto3.resource('s3')

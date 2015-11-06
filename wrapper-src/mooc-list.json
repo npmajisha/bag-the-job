@@ -73,7 +73,7 @@
       "target": "courseDesc"
     },
     {
-      "type": "href",
+      "type": "a_href",
       "tag": "div",
       "attribute": "class",
       "value": "gotoCurso",
