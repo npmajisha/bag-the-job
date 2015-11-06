@@ -55,6 +55,13 @@
       "value":"value-title",
       "type":"title",
       "target":"jobRating"
+    },
+    {
+      "tag":"img",
+      "attribute":"class",
+      "value":"notranslate_alt notranslate_title",
+      "type":"src",
+      "target":"jobEmpImage"
     }
   ]
 }
