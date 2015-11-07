@@ -41,6 +41,7 @@
       "tag": "div",
       "attribute": "class",
       "value": "field-name-field-recommended-background",
+      "type": "text",
       "target": "recommendedBackground"
     },
     {
@@ -61,21 +62,30 @@
       "tag": "div",
       "attribute": "id",
       "value": "introCurso",
+      "type": "text",
       "target": "courseIntro"
     },
     {
       "tag": "div",
       "attribute": "id",
       "value": "corpoCurso",
+      "type": "text",
       "target": "courseDesc"
     },
     {
-      "type": "href",
+      "type": "a_href",
       "tag": "div",
       "attribute": "class",
       "value": "gotoCurso",
       "index": "0",
       "target": "courseLink"
+    },
+    {
+      "tag": "div",
+      "type": "list",
+      "attribute": "class",
+      "value": "field-name-field-tags",
+      "target": "tags"
     }
   ]
 }
