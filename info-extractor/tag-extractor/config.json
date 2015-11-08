@@ -1,0 +1,8 @@
+{
+  "schema": "bagthejob",
+  "user": "akhil",
+  "password": "",
+  "s3bucket": "cs548-wrapped-data",
+  "s3prefix": "mooc-list",
+  "field": "tags"
+}
