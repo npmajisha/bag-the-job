@@ -3,7 +3,7 @@ var app = express();
 var solr = require('solr-client');
 var router = express.Router();
 var bodyParser = require('body-parser');
-var env = (process.argv[2] != null) ? process.argv[2] : 'default';
+var env = process.env.ENV;
 var config = require('../config.json');
 
 app.use(bodyParser.json()); // support json encoded bodies
@@ -19,11 +19,9 @@ router.get('/', function (req, res, next) {
 
     var client = solr.createClient(host = config[env].ec2InstanceIP, port = config[env].ec2InstancePORT, core = config[env].solrCore);
 
-    console.log(city + state + keywords);
-
     var params = {};
     if (city != null) {
-        params['jobCity'] = city;
+        params['jobCity'] = '"' + city + '"';
     }
     if (state != null) {
         params['jobState'] = state;
@@ -39,7 +37,6 @@ router.get('/', function (req, res, next) {
         .q(params)
         .start(start)
         .rows(10);
-    console.log(query);
     client.search(query, function (err, response) {
         if (err) {
             throw err;

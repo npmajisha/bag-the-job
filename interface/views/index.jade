@@ -6,13 +6,13 @@ block content
             form.form-horizontal.col-md-offset-3.col-md-6
                 fieldset
                     // Text input
-                    .form-group.col-md-5
+                    .form-group.col-md-6
                         input#keywords.form-control.input-md(name='keywords', type='text', placeholder='Keywords')
                     // Text input
                     .form-group.col-md-5
                         input#location.form-control.input-md(name='location', type='text', placeholder='Location', autocomplete='on')
                     // Button
-                    .form-group.col-md-1.col-md-push-1
+                    .form-group.col-md-1
                         button#search.btn.btn-success(name='search') Search
         legend
 
@@ -25,3 +25,6 @@ block content
 
         .row
             #jobs.col-md-6.col-md-offset-3(style="display: none;")
+
+        .row
+            #moreinfo.modal.fade(style="display: none;")

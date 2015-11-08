@@ -20,6 +20,9 @@
             return src;
 
         });
+
+        Handlebars.registerPartial('getMoreInfo', Handlebars.templates['moreinfo']);
+        Handlebars.registerPartial('getBooks', Handlebars.templates['book']);
     });
 
     function initialize() {
@@ -53,7 +56,7 @@
             data["noParam"] = "true";
         }
 
-        data['start'] = (page - 1) * 10 + 1;
+        data['start'] = (page - 1) * 10;
 
         $.ajax({
             url: '/jobs',
@@ -69,21 +72,95 @@
         var template = Handlebars.templates['job'];
         var inner = template({job: response.docs});
         $("#jobs").html(inner).css("display", "inline");
+
+        updateEventListeners();
+
+        updateSummary(response);
+
+        updatePagination(response);
+    }
+
+    function updateSummary(response) {
         if (response.numFound == 0) {
             $("#summary").html("No jobs found").css("display", "inline");
         } else {
-            $("#summary").html("Showing " + response.start + "-" + Math.min(response.start + 9, response.numFound - 1) + " of " + (response.numFound - 1) + " jobs").css("display", "inline");
+            $("#summary").html("Showing " + (response.start + 1) + "-" + Math.min(response.start + 10, response.numFound) + " of " + (response.numFound) + " jobs").css("display", "inline");
         }
+    }
 
+    function updatePagination(response) {
         $('#pagination').css("display", "inline");
-        $('#pages').empty();
-        $('#pages').removeData("twbs-pagination");
-        $('#pages').twbsPagination({
+        var pages = $('#pages');
+        pages.empty();
+        pages.removeData("twbs-pagination");
+        pages.twbsPagination({
             totalPages: Math.ceil(response.numFound / 10),
             visiblePages: Math.min(10, Math.ceil(response.numFound / 10)),
             onPageClick: getJobListing,
             initiateStartPageClick: false,
-            startPage: Math.ceil(response.start / 10)
+            startPage: Math.max(Math.ceil((response.start + 1) / 10), 1)
+        });
+    }
+
+    function updateEventListeners() {
+        $(".moreinfo").click(showDetailsModal);
+    }
+
+    function showDetailsModal(event) {
+        var template = Handlebars.templates['moreinfo'];
+        var moreinfo = $("#moreinfo");
+        moreinfo.html(template());
+        updateModalTitle(event.target);
+        updateModalTags(event.target);
+        updateBooksCarousel(getTags(event.target));
+        moreinfo.modal('toggle');
+
+    }
+
+    function getTags(jobDetails) {
+        //return jobDetails.dataset.tags.split(",");
+        return ['3D Graphics', 'AJAX', 'Algebra', 'Algorithmic Thinking', 'Algorithms', 'Amazon EC2', 'Analysis', 'Analytic', 'Analytical Techniques', 'Analytics', 'ANCOVA', 'Android'];
+    }
+
+    function updateModalTitle(jobDetails) {
+        $("#modal-title").text(jobDetails.dataset.title + ' - ' + jobDetails.dataset.employer + ' ' + jobDetails.dataset.city + ', '
+            + jobDetails.dataset.state);
+    }
+
+    function updateModalTags(jobDetails) {
+        var tags = getTags(jobDetails);
+        var template = Handlebars.templates['tags'];
+        $("#modal-tags").html(template({tag: tags}));
+        $(".skill-tag").click(function (event) {
+            updateBooksCarousel([($(event.target)).text()]);
+        });
+    }
+
+    function updateBooksCarousel(tags) {
+        //var tags = ['3D Graphics','AJAX','Algebra','Algorithmic Thinking','Algorithms','Amazon EC2','Analysis','Analytic','Analytical Techniques','Analytics','ANCOVA','Android'];
+        $.ajax({
+            url: '/books',
+            data: {keywords: tags},
+            dataType: "json",
+            type: 'GET',
+            success: function (response) {
+                var books = [];
+                for (var i = 0; i < response.length; i++) {
+                    books = books.concat(response[i]);
+                }
+                var template = Handlebars.templates['book'];
+                $("#modal-books").html("");
+                $("#modal-books").removeClass();
+                $("#modal-books").html(template({book: books}));
+                $("#modal-books").slick({
+                    dots: true,
+                    infinite: false,
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    initialSlide: 1
+                });
+                $('#modal-books').slick('slickGoTo', 0);
+            }
         });
     }
 

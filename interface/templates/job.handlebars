@@ -13,10 +13,11 @@
             </div>
             <div class="row">
                 <div class="col-md-8">
-                    <div class="star-ratings-css" , title="{{getStarRating jobRating}}"></div>
+                    <div class="star-ratings-css" title="{{getStarRating jobRating}}"></div>
                 </div>
                 <div class="col-md-4">
-                    <button class="btn btn-primary" onClick='window.open("{{jobUrl}}")'>Apply now</button>
+                    <button class="btn btn-primary moreinfo" id="moreinfo{{id}}" data-title="{{jobTitle}}" data-employer="{{jobEmployer}}"
+                            data-city="{{jobCity}}" data-state="{{jobState}}" data-tags="{{jobTags}}">More info</button>
                 </div>
             </div>
         </div>
