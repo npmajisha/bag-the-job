@@ -18,14 +18,14 @@ def setup_logging(logfile, loglevel=logging.DEBUG):
     logger.addHandler(handler)
     return logger
 
-def getS3Object(s3client, s3bucket, key):
-    return json.loads("["+str(s3client.get_object(Bucket=s3bucket, Key=key)['Body'].read())+"]")
+def getS3Object(s3client, config, key):
+    return json.loads("["+str(s3client.get_object(Bucket=config.get('sourceS3Bucket'), Key=key)['Body'].read(),'utf-8')+"]")
 
 def index_into_solr(solr_url, s3client, config, key, logger):
     solr = pysolr.Solr(solr_url, timeout=10)
     try:
-        payload = json.loads("["+str(s3client.get_object(Bucket=config.get('sourceS3Bucket'), Key=key)['Body'].read(),'utf-8')+"]")
-        solr.add(payload,commit=True)
+        payload = getS3Object(s3client,config, key)
+        solr.add(payload, commit=False, commitWithin='10000')
         logger.info("Indexed %s"%key)
     except pysolr.SolrError as err:
         logger.warn("Indexing failed for key %s with error %s" % (key,err))
