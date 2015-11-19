@@ -105,10 +105,11 @@ if __name__ == "__main__":
         client = boto3.client('s3')
 
         bucket = s3.Bucket(config.get('sourceS3Bucket'))
+        folder = config.get('sourceS3Folder')
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             futures = dict((executor.submit(process_key, client, config, key.key, logger), key.key)
-                           for key in bucket.objects.all())
+                           for key in bucket.objects.filter(Prefix=folder+"/"))
 
             for future in concurrent.futures.as_completed(futures):
                 key = futures[future]
