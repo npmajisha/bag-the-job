@@ -26,59 +26,28 @@ def string_sanitizer(job_description):
 def getS3Object(s3client, config, key):
     return json.loads("["+str(s3client.get_object(Bucket=config.get('sourceS3Bucket'), Key=key)['Body'].read(),'utf-8')+"]")
 
-def write_to_s3(s3client, config, fields, key, logger):
-    try:
-        s3client.put_object(Bucket=config.get('targetS3Bucket'), Key=key, Body=json.dumps(fields))
-    except:
-        logger.error("Unable to write %s to target bucket"%key)
+def write_to_s3(s3client, config, fields, key):
+    s3client.put_object(Bucket=config.get('targetS3Bucket'), Key=key, Body=json.dumps(fields))
 
-def fuzzy_match_with_ref_list(nouns, skill_list):
-    possible_skills = set()
-    for noun in nouns:
-        max_score = 0.00
-        for skill in skill_list:
-            jaro_score = jellyfish.jaro_winkler(skill, noun)
-            if jaro_score > max_score:
-                max_score = jaro_score
-                ref_skill = skill
-        if max_score >= 0.88:
-            possible_skills.add(ref_skill)
-    return possible_skills
-
-def chunk_noun_extractor(text, chunk_parser,key, logger):
-    jobDesc = string_sanitizer(text)
-    nouns = []
-    try:
-        sentences = nltk.sent_tokenize(jobDesc)
-        sentences = [nltk.word_tokenize(sent) for sent in sentences]
-        sentences = [nltk.pos_tag(sent) for sent in sentences]
-
-        for sent in sentences:
-            for chunk in chunk_parser.parse(sent).subtrees():
-                if chunk.label() == "NNP":
-                    nouns.append(" ".join("%s" % tup[0].lower() for tup in chunk.leaves()))
-    except:
-        logger.error("Unable to extract nouns for %s"%key)
-    return nouns
-
-def skill_extractor(s3client, config, key, chunk_parser, skill_list, logger):
+def skill_extractor(s3client, config, key, chunk_parser, logger):
     print("Processing %s"%key)
     jobDetail = getS3Object(s3client,config, key)[0]
-    #get all nouns
-    nouns = chunk_noun_extractor(jobDetail["jobDesc"], chunk_parser, key, logger)
-    #compare with reference skill list
-    skills = fuzzy_match_with_ref_list(nouns, skill_list)
-    #add to job details
-    jobDetail["jobSkills"] = skills
-    #store in s3
-    write_to_s3(s3client, config, jobDetail, key, logger)
+    jobDesc = string_sanitizer(jobDetail["jobDesc"])
+    sentences = nltk.sent_tokenize(jobDesc)
+    sentences = [nltk.word_tokenize(sent) for sent in sentences]
+    sentences = [nltk.pos_tag(sent) for sent in sentences]
+    possible_skills = []
+    for sent in sentences:
+        for chunk in chunk_parser.parse(sent).subtrees():
+            if chunk.label() == "NNP":
+                possible_skills.append(" ".join("%s" % tup[0].lower() for tup in chunk.leaves()))
+    print(possible_skills)
     return
 
 def main():
     # initialize argument parser
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', '-c', help='configuration file')
-    parser.add_argument('--reflist','-rl', help='reference list file')
     parser.add_argument('--logfile', '-lf', help='log file target')
     args = parser.parse_args()
 
@@ -88,13 +57,6 @@ def main():
     #read configuration file
     with open(args.config) as file:
         config = json.loads(file.read())
-
-    #read reference list from csv
-    skill_list = []
-    with open(args.reflist) as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            skill_list.append(row['name'])
 
     if 'assumedRole' in config:
         sts_client = boto3.client('sts')
@@ -115,7 +77,7 @@ def main():
 
     #spawn threads to index
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-            futures = dict((executor.submit(skill_extractor, client, config, obj.key, chunk_parser,skill_list, logger), obj.key)
+            futures = dict((executor.submit(skill_extractor, client, config, obj.key, chunk_parser, logger), obj.key)
                            for obj in bucket.objects.filter(Prefix=folder+"/"))
 
             for future in concurrent.futures.as_completed(futures):
