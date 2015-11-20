@@ -1,7 +1,0 @@
-{
-  "sourceS3Bucket": "cs548-wrapped-data",
-  "sourceS3Folder": "mooc-list",
-  "solrServerPort":"54.86.116.103:8983",
-  "solrCoreName":"courses",
-  "assumedRole":""
-}

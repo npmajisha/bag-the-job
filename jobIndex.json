@@ -1,6 +1,0 @@
-{
-  "sourceS3Bucket": "bag-the-job-wrapped1",
-  "sourceS3Folder": "jobs",
-  "solrServerPort":"54.86.116.103:8983",
-  "solrCoreName":"jobs"
-}
