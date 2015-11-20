@@ -1,0 +1,6 @@
+{
+  "sourceS3Bucket": "bag-the-job-wrapped",
+  "sourceS3Folder": "jobs",
+  "targetS3Bucket": "bag-the-job-extracted",
+  "targetS3Folder": "jobs"
+}
