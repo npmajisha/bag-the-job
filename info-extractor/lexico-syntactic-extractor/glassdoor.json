@@ -1,0 +1,5 @@
+{
+  "assumedRole": "arn:aws:iam::995811446817:role/shared_bagthejob",
+  "sourceS3Bucket": "bag-the-job-extracted",
+  "sourceS3Folder": "jobs"
+}
