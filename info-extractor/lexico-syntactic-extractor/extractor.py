@@ -10,6 +10,10 @@ from concurrent import futures
 from logging import handlers
 import os
 import re
+import itertools
+
+executor_count = 0
+
 
 def setup_logging(logfile, loglevel=logging.DEBUG):
     # create log directory
@@ -53,14 +57,17 @@ def extract_terms(line, parser, candidate_lists):
     nnps = []
     tokens = nltk.pos_tag(nltk.word_tokenize(line))
     chunks = list(parser.parse(tokens).subtrees())[0]
+    last_index = -1
     for chunk in chunks:
         if type(chunk).__name__ == 'Tree' and chunk.label() == 'NNP':
             nnp = " ".join("%s" % tup[0].lower() for tup in chunk.leaves())
-            if has_valid_predecessor(chunks.index(chunk), chunks):
+            index = chunks.index(chunk)
+            if has_valid_predecessor(chunks.index(chunk), chunks) and (index - last_index <= 2 or last_index == -1):
                 nnps.append(nnp)
             else:
                 add_to_candidate_lists(nnps, candidate_lists)
                 nnps = [nnp]
+            last_index = chunks.index(chunk)
     add_to_candidate_lists(nnps, candidate_lists)
 
 
@@ -70,6 +77,12 @@ def get_s3_object(s3client, config, key):
 
 
 def extract_candidate_lists(client, config, key, parser, candidate_lists, logger):
+    global executor_count
+
+    executor_count += 1
+    if executor_count%100 == 0:
+        logger.info("Executed %s instances" % str(executor_count))
+
     job_posting = get_s3_object(client, config, key)
     job_desc = job_posting["jobDesc"]
 
@@ -112,12 +125,15 @@ def main():
     bucket = s3.Bucket(config.get('sourceS3Bucket'))
     folder = config.get('sourceS3Folder')
 
-    grammar = r"NNP: {<NNP>+<NN>?}"
+    grammar = r"""
+        NNP:    {<NNP>+<NN|NNS>?}
+                {<NN|NNS>+}
+        """
     parser = nltk.RegexpParser(grammar)
     candidate_lists = []
 
     # spawn threads to extract
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         futures = dict(
             (
                 executor.submit(extract_candidate_lists, client, config, obj.key, parser,
@@ -131,7 +147,10 @@ def main():
                 logger.error('%r generated an exception: %s' % (key,
                                                                 future.exception()))
 
-    print(candidate_lists)
+    if concurrent.futures.wait(futures) is not None:
+        candidate_lists.sort()
+        candidate_lists = list(k for k, _ in itertools.groupby(candidate_lists))
+        json.dump(candidate_lists, open('candidate_lists.json', 'w'))
 
 
 if __name__ == "__main__":
