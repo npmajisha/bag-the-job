@@ -17,7 +17,9 @@ router.get('/', function (req, res, next) {
     var start = req.query.start;
     var noParameters = req.query.noParam;
 
-    var client = solr.createClient(host = config[env].ec2InstanceIP, port = config[env].ec2InstancePORT, core = config[env].solrCore);
+    var client = solr.createClient(host = config[env].ec2InstanceIP,
+        port = config[env].ec2InstancePORT,
+        core = config[env].solrCoreJobs);
 
     var params = {};
     if (city != null) {

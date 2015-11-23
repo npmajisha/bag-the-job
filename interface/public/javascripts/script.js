@@ -113,13 +113,14 @@
         updateModalTitle(event.target);
         updateModalTags(event.target);
         updateBooksCarousel(getTags(event.target));
+        updateCourseCarousel(getTags(event.target));
         moreinfo.modal('toggle');
 
     }
 
     function getTags(jobDetails) {
         //return jobDetails.dataset.tags.split(",");
-        return ['3D Graphics', 'AJAX', 'Algebra', 'Algorithmic Thinking', 'Algorithms', 'Amazon EC2', 'Analysis', 'Analytic', 'Analytical Techniques', 'Analytics', 'ANCOVA', 'Android'];
+        return ['3D Graphics', 'AJAX', 'Algebra', 'Algorithms', 'Amazon EC2', 'Analysis', 'Analytic', 'Analytics', 'Android'];
     }
 
     function updateModalTitle(jobDetails) {
@@ -133,6 +134,7 @@
         $("#modal-tags").html(template({tag: tags}));
         $(".skill-tag").click(function (event) {
             updateBooksCarousel([($(event.target)).text()]);
+            updateCourseCarousel([($(event.target)).text()])
         });
     }
 
@@ -149,17 +151,46 @@
                     books = books.concat(response[i]);
                 }
                 var template = Handlebars.templates['book'];
-                $("#modal-books").html("");
-                $("#modal-books").removeClass();
-                $("#modal-books").html(template({book: books}));
-                $("#modal-books").slick({
+                var modalBooks = $("#modal-books");
+                modalBooks.html("");
+                modalBooks.removeClass();
+                modalBooks.html(template({book: books}));
+                modalBooks.slick({
                     dots: true,
                     infinite: false,
                     slidesToShow: 3,
                     slidesToScroll: 3,
                     initialSlide: 1
                 });
-                $('#modal-books').slick('slickGoTo', 0);
+                modalBooks.slick('slickGoTo', 0);
+            }
+        });
+    }
+
+    function updateCourseCarousel(tags) {
+        $.ajax({
+            url: '/courses',
+            data: {keywords: tags},
+            dataType: "json",
+            type: 'GET',
+            success: function (response) {
+                var courses = [];
+                for (var i = 0; i < response.length; i++) {
+                    courses = courses.concat(response[i].response.docs);
+                }
+                var template = Handlebars.templates['courses'];
+                var modalCourses = $("#modal-courses");
+                modalCourses.html("");
+                modalCourses.removeClass();
+                modalCourses.html(template({course: courses}));
+                modalCourses.slick({
+                    dots: true,
+                    infinite: false,
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    initialSlide: 1
+                });
+                modalCourses.slick('slickGoTo', 0);
             }
         });
     }

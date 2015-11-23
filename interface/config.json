@@ -7,6 +7,7 @@
   "development": {
     "ec2InstanceIP": "54.86.116.103",
     "ec2InstancePORT": "8983",
-    "solrCore": "test_jobs"
+    "solrCoreJobs": "test_jobs",
+    "solrCoreCourses": "courses"
   }
 }

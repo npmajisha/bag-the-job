@@ -1,0 +1,48 @@
+{{#each course}}
+    <div class="col-md-2">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>{{courseTitle}}</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                Provider
+            </div>
+            <div class="col-md-7">
+                {{courseProvider}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                University
+            </div>
+            <div class="col-md-7">
+                {{university}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                Duration
+            </div>
+            <div class="col-md-7">
+                {{duration}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                Start date
+            </div>
+            <div class="col-md-7">
+                {{startDate}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <button type="button" class="btn btn-link" onclick="window.open('{{courseLink}}', '_blank');">Goto
+                course</button>
+            </div>
+        </div>
+    </div>
+{{/each}}
+
