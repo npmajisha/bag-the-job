@@ -107,14 +107,21 @@
     }
 
     function showDetailsModal(event) {
-        var template = Handlebars.templates['moreinfo'];
-        var moreinfo = $("#moreinfo");
-        moreinfo.html(template());
-        updateModalTitle(event.target);
-        updateModalTags(event.target);
-        updateBooksCarousel(getTags(event.target));
-        updateCourseCarousel(getTags(event.target));
-        moreinfo.modal('toggle');
+        //var template = Handlebars.templates['moreinfo'];
+        //var moreinfo = $("#moreinfo");
+        //moreinfo.html(template());
+        //updateModalTitle(event.target);
+        //updateModalTags(event.target);
+        //updateBooksCarousel(getTags(event.target));
+        //updateCourseCarousel(getTags(event.target));
+        //moreinfo.modal('toggle');
+
+        // template processing for job details page
+        var template = Handlebars.templates['jobdetails'];
+        var html = template();
+
+        var w = window.open();
+        $(w.document.body).html(html);
 
     }
 
