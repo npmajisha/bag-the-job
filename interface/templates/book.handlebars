@@ -2,9 +2,20 @@
     <div class="col-md-2">
         <div class="row">
             <div class="col-md-12">
-                <img src="{{thumbnail}}">
+                <img style="height:170px;" src="{{getBookImage thumbnail}}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{link}}" title="{{title}}" class="book-link">
+                    {{title}}
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 authors" title="{{authors}}">
+                {{authors}}
             </div>
         </div>
     </div>
 {{/each}}
-

@@ -25,7 +25,10 @@ router.get('/', function (req, res, next) {
 
 // callback to get listings for a keyword
 function getBooksFromGoogle(keyword, callback) {
-    books.search(keyword, function (error, results) {
+    var options = {
+        key: process.env.key
+    };
+    books.search(keyword, options, function (error, results) {
         callback(error, results);
     });
 }

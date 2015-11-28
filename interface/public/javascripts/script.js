@@ -13,12 +13,24 @@
             return stars[temp];
         });
 
+        Handlebars.registerHelper('getCourseRating', function (rating) {
+            temp = Math.round(rating);
+            var stars = ['.000', '.125', '.250', '.375', '.500', '.625', '.750', '.875', '1.000', '1.125', '1.250'];
+            return stars[temp];
+        });
+
         Handlebars.registerHelper('getEmployerImage', function (src) {
             if (src == null || src == "") {
                 return "/images/no-image.jpg";
             }
             return src;
+        });
 
+        Handlebars.registerHelper('getBookImage', function (src) {
+            if (src == null || src == "") {
+                return "https://books.google.com/googlebooks/images/no_cover_thumb.gif";
+            }
+            return src;
         });
 
         Handlebars.registerPartial('getMoreInfo', Handlebars.templates['moreinfo']);
@@ -104,6 +116,7 @@
 
     function updateEventListeners() {
         $(".moreinfo").click(showDetailsModal);
+        $(".course-info").click(showCourseDetails);
     }
 
     function showDetailsModal(event) {
@@ -112,15 +125,18 @@
         moreinfo.html(template());
         updateModalTitle(event.target);
         updateModalTags(event.target);
+        updateModalDesc(event.target);
         updateBooksCarousel(getTags(event.target));
         updateCourseCarousel(getTags(event.target));
         moreinfo.modal('toggle');
-
     }
 
     function getTags(jobDetails) {
-        //return jobDetails.dataset.tags.split(",");
-        return ['3D Graphics', 'AJAX', 'Algebra', 'Algorithms', 'Amazon EC2', 'Analysis', 'Analytic', 'Analytics', 'Android'];
+        return jobDetails.dataset.tags.split(",");
+    }
+
+    function updateModalDesc(jobDetails) {
+        $("#modal-desc").html('\<pre\>' + jobDetails.dataset.jobdesc + '\</pre\>');
     }
 
     function updateModalTitle(jobDetails) {
@@ -138,8 +154,13 @@
         });
     }
 
+    function showCourseDetails(event) {
+        var courseInfo = $("#course-info");
+        courseInfo.text(event.target.dataset.coursedesc);
+        courseInfo.css("display", "block");
+    }
+
     function updateBooksCarousel(tags) {
-        //var tags = ['3D Graphics','AJAX','Algebra','Algorithmic Thinking','Algorithms','Amazon EC2','Analysis','Analytic','Analytical Techniques','Analytics','ANCOVA','Android'];
         $.ajax({
             url: '/books',
             data: {keywords: tags},
@@ -150,17 +171,24 @@
                 for (var i = 0; i < response.length; i++) {
                     books = books.concat(response[i]);
                 }
+                for (var i = 0; i < books.length; i++) {
+                    if(books[i].authors !=null) {
+                        books[i].authors = books[i].authors.join(', ');
+                    } else {
+                        books[i].authors = "";
+                    }
+                }
                 var template = Handlebars.templates['book'];
                 var modalBooks = $("#modal-books");
                 modalBooks.html("");
                 modalBooks.removeClass();
                 modalBooks.html(template({book: books}));
                 modalBooks.slick({
-                    dots: true,
                     infinite: false,
                     slidesToShow: 3,
                     slidesToScroll: 3,
-                    initialSlide: 1
+                    initialSlide: 1,
+                    adaptiveHeight: true
                 });
                 modalBooks.slick('slickGoTo', 0);
             }
@@ -183,14 +211,22 @@
                 modalCourses.html("");
                 modalCourses.removeClass();
                 modalCourses.html(template({course: courses}));
+                if(courses.length == 0) {
+                    modalCourses.css("display", "none");
+                    $("#course-heading").css("display", "none");
+                } else {
+                    modalCourses.css("display", "block");
+                    $("#course-heading").css("display", "inline");
+                }
                 modalCourses.slick({
-                    dots: true,
                     infinite: false,
                     slidesToShow: 3,
                     slidesToScroll: 3,
-                    initialSlide: 1
+                    initialSlide: 1,
+                    adaptiveHeight: true
                 });
                 modalCourses.slick('slickGoTo', 0);
+                updateEventListeners();
             }
         });
     }

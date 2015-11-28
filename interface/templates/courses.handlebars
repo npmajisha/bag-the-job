@@ -2,45 +2,49 @@
     <div class="col-md-2">
         <div class="row">
             <div class="col-md-12">
-                <h4>{{courseTitle}}</h4>
+                <h4 onclick="window.open('{{courseLink}}', '_blank');" style="color:#337ab7; cursor:pointer;">{{courseTitle}}</h4>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
-                Provider
+            <div class="col-md-1">
+                <i class="fa fa-bookmark"></i>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-10">
                 {{courseProvider}}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
-                University
+            <div class="col-md-1">
+                <i class="fa fa-university"></i>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-10">
                 {{university}}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
-                Duration
+            <div class="col-md-1">
+                <i class="fa fa-clock-o"></i>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-10">
                 {{duration}}
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
-                Start date
+            <div class="col-md-1">
+                <i class="fa fa-calendar"></i>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-10">
                 {{startDate}}
             </div>
         </div>
         <div class="row">
+            <div class="col-md-8">
+                <div class="star-ratings-css" title="{{getCourseRating courseRating}}"></div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-5">
-                <button type="button" class="btn btn-link" onclick="window.open('{{courseLink}}', '_blank');">Goto
-                course</button>
+                <button type="button" class="btn btn-link course-info" data-coursedesc="{{courseDesc}}">More info</button>
             </div>
         </div>
     </div>
